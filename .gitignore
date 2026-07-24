@@ -1,0 +1,23 @@
+.DS_Store
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Generated output
+node_modules/
+coverage/
+dist/
+tmp/
+graphify-out/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
