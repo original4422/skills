@@ -40,6 +40,13 @@ Write repository documentation and skill instructions in English. Update the
 README catalog whenever a skill is added, renamed, or removed. Keep factual
 claims traceable to primary sources or mark them as local design decisions.
 
+## Commit Messages
+
+Use English Conventional Commit titles: `<type>(<scope>): <summary>`.
+Group the body by affected area (`<area>:`), with concise `-` bullets describing
+what changed and why. Separate groups with blank lines; omit empty groups.
+Follow commit `d0236654369da62fa851c3c43927c31d59f103c3` as the format example.
+
 ## Verification
 
 For each changed skill:

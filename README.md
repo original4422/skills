@@ -52,6 +52,10 @@ another Mac. Adapts changes to the target device, supports acceptance after
 each section, and assesses backup cleanup at the end. Application-state
 restoration is a separate, per-application request.
 
+Invoke manually with `$mac-environment-migration` or explicitly ask to use
+`mac-environment-migration`. Automatic invocation is disabled in Codex through
+`agents/openai.yaml`.
+
 ## Repository Structure
 
 ```text

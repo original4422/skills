@@ -1,9 +1,14 @@
 ---
 name: mac-environment-migration
-description: Migrate a Mac environment to another Mac using a lightweight inventory and an approved change plan. Use to export or apply macOS settings, install software, adapt shell and development runtimes, resume migration, restore a named application's state, or assess migration backup cleanup.
+disable-model-invocation: true
+description: Migrate Mac settings, software, and development environments between Macs with a lightweight inventory and an approved plan.
 ---
 
 # Mac Environment Migration
+
+Start only on explicit user invocation, such as `$mac-environment-migration`
+or "Use mac-environment-migration". Continue that migration in follow-up turns
+without requiring the user to invoke the skill again.
 
 Use the source Mac as a reference and adapt changes to the target Mac's macOS
 version and Intel or Apple silicon architecture. Execute only approved changes.
