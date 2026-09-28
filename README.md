@@ -34,11 +34,23 @@ Select the skills and supported agents you want to install when prompted.
 
 ## Available Skills
 
-### `git-commit-message`
+### Development
+
+#### [`git-commit-message`](skills/git-commit-message/SKILL.md)
 
 Drafts an English Conventional Commit message from staged changes only. It
 groups the body by meaningful repository areas and does not create a commit
 unless explicitly requested.
+
+### System & Environment
+
+#### [`mac-environment-migration`](skills/mac-environment-migration/SKILL.md)
+
+Exports a lightweight Mac environment inventory and builds an approved plan
+for settings, software installation, and shell or development runtime setup on
+another Mac. Adapts changes to the target device, supports acceptance after
+each section, and assesses backup cleanup at the end. Application-state
+restoration is a separate, per-application request.
 
 ## Repository Structure
 
@@ -52,6 +64,10 @@ Every installable skill lives in `skills/<skill-name>/` and has a `SKILL.md`
 entry point. Runtime references, scripts, or assets should stay inside that
 skill's directory. Repository-level research stays outside the installable
 skill so it does not add unnecessary agent context.
+
+Keep skill directories flat. Group the catalog above by purpose rather than
+adding category directories under `skills/`. Add a category when it has a
+skill to list; changing a catalog category does not change installation paths.
 
 ## Design Principles
 
