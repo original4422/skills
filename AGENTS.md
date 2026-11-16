@@ -36,7 +36,8 @@ use lowercase kebab-case names.
 
 ## Documentation
 
-Write repository documentation and skill instructions in English. Update the
+Repository documentation and skill instructions may use Chinese or English.
+Preserve the supplied language unless a translation is requested. Update the
 README catalog whenever a skill is added, renamed, or removed. Keep factual
 claims traceable to primary sources or mark them as local design decisions.
 

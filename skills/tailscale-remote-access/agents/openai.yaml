@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tailscale 远程访问"
+  short_description: "配置 Mac 的 Tailscale、稳定远程访问、SSH 公钥免密登录与连接排障"
+  default_prompt: "使用 $tailscale-remote-access 配置这两台 Mac，让被连接机稳定在线，并通过 SSH 别名和公钥免密登录。"

@@ -32,6 +32,24 @@ npx skills@latest add original4422/skills
 
 Select the skills and supported agents you want to install when prompted.
 
+单独安装 Mac 环境迁移或 Tailscale 远程访问 Skill（用户级 Codex）：
+
+```sh
+npx skills@latest add original4422/skills --skill mac-environment-migration -g -a codex
+npx skills@latest add original4422/skills --skill tailscale-remote-access -g -a codex
+```
+
+一次安装这两个 Skill：
+
+```sh
+npx skills@latest add original4422/skills \
+  --skill mac-environment-migration tailscale-remote-access -g -a codex
+```
+
+将 `-a codex` 换成 `-a claude-code` 可安装到 Claude Code；省略 `-g` 则安装到当前项目。
+安装后可使用 `$mac-environment-migration` 或 `$tailscale-remote-access` 调用。
+Skill 的安装不会自动执行设备迁移、安装 Tailscale 或修改远端设置。
+
 ## Available Skills
 
 ### Development
@@ -55,6 +73,16 @@ restoration is a separate, per-application request.
 Invoke manually with `$mac-environment-migration` or explicitly ask to use
 `mac-environment-migration`. Automatic invocation is disabled in Codex through
 `agents/openai.yaml`.
+
+#### [`tailscale-remote-access`](skills/tailscale-remote-access/SKILL.md)
+
+配置 macOS 被连接机的 Tailscale、远程登录和供电场景下的睡眠设置，
+在连接机部署 SSH 公钥并设置快捷别名，验证免密登录与连接稳定性。
+附带只读连通性诊断脚本，并提供按需使用的系统级 `tailscaled`、
+Tailscale SSH 和屏幕共享配置说明。正文为中文。
+
+默认采用官方独立应用版 Tailscale + macOS 远程登录 + SSH 公钥认证。
+文档区分系统睡眠与息屏、状态显示与实际连通性，以及远端账户密码与私钥口令。
 
 ## Repository Structure
 
