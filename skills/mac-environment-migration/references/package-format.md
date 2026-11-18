@@ -1,114 +1,69 @@
-# Package and Execution Records
+# 迁移包与执行记录
 
-Use this format for source export, target ingestion, and resumption. Store
-structured inventories as UTF-8 JSON and user summaries as Markdown. The
-package is a handoff format, not an executable script.
+源机导出、目标机读取和续做迁移都使用此格式。结构化清单保存为 UTF-8 JSON，供用户阅读的摘要写成 Markdown。迁移包内的配置供目标机审阅和适配。
 
-## Portable package
+## 便携迁移包
 
 ```text
-mac-migration-<timestamp-or-short-id>/
+mac-migration-<时间戳或短标识>/
   manifest.json
   summary.md
-  configs/          # Only approved, reviewed text configurations
+  configs/          # 仅包含已审阅并获准携带的文本配置
 ```
 
-Exclude target backups, sensitive execution history, and installers. Count the
-10,000,000-byte default limit against total uncompressed size. The summary
-reports actual size, contents, exclusions, missing information, and how to
-continue on the target. Record capture time so an old package is not mistaken
-for current source state.
+排除目标机备份、含敏感信息的执行历史和安装器。默认上限为 10,000,000 字节，按未压缩总体积计算。摘要记录实际大小、包内内容、排除项、缺失信息和目标机上的继续步骤。注明采集时间，便于判断内容是否仍适用。
 
 ## manifest.json v1
 
-Required top-level fields:
+必需的顶层字段如下。
 
-| Field | Contents |
+| 字段 | 内容 |
 | --- | --- |
-| `schema_version` | Number `1`. Explain or convert unsupported versions before use; do not guess their meaning. |
-| `migration_id` | Collection identifier, not a device serial number or user account. |
-| `captured_at` | ISO 8601 timestamp with time zone. |
-| `source` | `macos_version`, `architecture`, and necessary hardware capabilities; no serial number. |
-| `selected_sections` | Nonempty subset of `settings`, `software`, and `environment`. |
-| `items` | Inventory entries using the common fields below. |
-| `app_restore_hints` | Application restoration metadata; an empty list if none. |
-| `omissions` | Unreadable, excluded, or redacted information with reasons; an empty list if none. |
-| `files` | Included file inventory; an empty list if none. |
+| `schema_version` | 数字 `1`。遇到不支持的版本时，先说明或转换格式，再使用。 |
+| `migration_id` | 采集标识。避免使用设备序列号或用户账号。 |
+| `captured_at` | 带时区的 ISO 8601 时间戳。 |
+| `source` | `macos_version`、`architecture` 和必要的硬件信息。省略序列号。 |
+| `selected_sections` | 由 `settings`、`software`、`environment` 中至少一项组成。 |
+| `items` | 清单条目，使用下述通用字段。 |
+| `app_restore_hints` | 应用恢复元数据。没有时记录为空列表。 |
+| `omissions` | 无法读取、主动排除或已脱敏的内容及原因。没有时记录为空列表。 |
+| `files` | 包内文件清单。没有时记录为空列表。 |
 
-Common item fields:
+每条清单记录包含以下字段。
 
-- `id`: unique, stable identifier connecting inventory, plan, execution, and
-  backup records.
-- `section`: one of the selected sections.
-- `name`: readable item name.
-- `observed`: actual source value, version, or configuration summary; `null`
-  when unknown.
-- `evidence`: observation method or source location and verification limits;
-  no raw sensitive values.
-- `compatibility_notes`: known architecture, system-version, or path constraints.
+- `id` 为唯一且稳定的标识，用于关联清单、计划、执行和备份记录。
+- `section` 为用户选中的范围之一。
+- `name` 为易读的项目名称。
+- `observed` 记录源机实测值、版本或配置摘要。未知时用 `null`。
+- `evidence` 记录观测方式或来源位置及验证局限。省略敏感原值。
+- `compatibility_notes` 记录已知的架构、系统版本或路径限制。
 
-Add relevant type-specific details, leaving unknown values empty:
+按项目类型补充细节，未知的值留空。
 
-- **Settings:** category, preference domain and key or UI location, value type,
-  and applicable hardware. Verify write methods on the target; do not store
-  commands intended for direct execution.
-- **Software:** bundle ID or other reliable identity, developer, version,
-  installation origin, candidate formula/cask identity, official links, and
-  whether it is directly used. A candidate package is not installation approval.
-- **Environment:** tool or configuration purpose, version manager, original
-  version, configuration-file references, roles of original paths, and fields
-  to recompute on the target. Avoid full process-environment dumps.
+- **设置**：记录类别、偏好域和键名或界面位置、值类型，以及适用硬件。在目标机核实写入方式。包内只需保存这些参考数据。
+- **软件**：记录 bundle ID 或其他可靠标识、开发者、版本、安装来源、候选 formula 或 cask、官方链接，以及是否直接使用。候选软件包仍需纳入目标机计划取得批准。
+- **开发环境**：记录工具或配置的用途、版本管理器、原版本、配置文件引用、旧路径的用途，以及需要在目标机重新计算的字段。避免转储整个进程环境。
 
-Each `app_restore_hints` entry identifies the application, configuration
-locations, plugin names and versions when observable, official sync/import
-methods, additional source data required, and limitations. Store only metadata
-by default. For accounts, record that user sign-in is required, not credentials
-or sessions.
+每条 `app_restore_hints` 记录应用、配置位置、可查到的插件名和版本、官方同步或导入方式、需补取的源机数据及限制。默认只保存元数据。账号相关事项记为用户需要重新登录，省略凭据和会话。
 
-Each `files` entry records its package-relative path, byte count, SHA-256,
-purpose, associated item IDs, and intended destination role. Include contents
-only after sensitive-content review and approval. Explain placeholders such as
-`${USER_HOME}` and resolve them during target planning; do not directly expand
-or execute package text. Do not claim a missing file is included.
+每条 `files` 记录包内相对路径、字节数、SHA-256、用途、关联项目 ID 和文件在目标机上的用途。文件正文经敏感内容审查并获准后才纳入。解释 `${USER_HOME}` 等占位符，在目标机计划中确定具体值。按数据审阅包内文本，禁止直接展开或执行。实际缺失的文件应在摘要中标明。
 
-On ingestion, verify field types, unique item IDs, file sizes, and checksums.
-Package file references must not use absolute paths, `..` traversal, or
-symlinks escaping the package. Verify identity and paths before planning writes.
-A matching hash proves consistency, not trust in the source.
+读取时核对字段类型、项目 ID 是否唯一、文件大小和校验和。文件引用只能使用包内相对路径，拒绝绝对路径、`..` 路径穿越及指向包外的符号链接。规划写入前，先核实来源身份和路径。校验和用于核对文件完整性，文件来源仍需审阅。
 
-## Target-local records
+## 目标机本地记录
 
-Keep one run's `plan.json`, `run.json`, and, only when needed, `backups/` together
-in the workspace or agreed location. Keep this directory separate from the
-portable package and show its location to the user.
+将同一次执行的 `plan.json`、`run.json` 和按需建立的 `backups/` 放在工作区或约定位置的同一目录。该目录独立于便携迁移包，位置需告知用户。
 
-`plan.json` records migration and run IDs, target system and architecture,
-selected sections, acceptance mode, per-item differences and actions, origins,
-dependencies, verification methods, the approved item set, and plan version.
-Record only approval actually received. Version changed actions and identify
-which items need renewed approval.
+`plan.json` 记录迁移与执行 ID、目标系统和架构、所选范围、验收方式、逐项差异和操作、来源、依赖、验证方法、已批准项目及计划版本。只记录用户实际给出的批准。操作变更时更新计划版本，并标明需要重新批准的项目。
 
-Keep `run.json` compact:
+`run.json` 精简记录以下内容。
 
-- Run identifier, start time, last update time, and associated plan version.
-- Item status: `planned / approved / running / verified / failed / blocked /
-  manual / skipped`. Record user acceptance separately as `pending / accepted /
-  deferred`; automatic verification is not user acceptance.
-- Actual changes, verification results, concise errors, and next actions.
-  Record necessary recovery values only after review; secrets belong solely
-  in protected local backups.
-- Backup index: `path` (absolute), `purpose`, `item_ids`, `bytes`, and `status`
-  (`retained / removed`). If no backup is needed, record why rather than creating
-  an empty backup.
-- Final assessment: exact recommended deletion or retention paths and reasons,
-  actual cleanup approval, and results. Never mark unreceived approval as granted.
+- 执行标识、开始时间、最近更新时间和关联的计划版本。
+- 项目状态使用 `planned / approved / running / verified / failed / blocked / manual / skipped`。用户验收另记为 `pending / accepted / deferred`，以用户回复为准。
+- 实际改动、验证结果、简明错误和接下来的操作。必要的恢复值审查后再记录。敏感信息只保留在受保护的本地备份中。
+- 备份索引包含 `path`（绝对路径）、`purpose`、`item_ids`、`bytes` 和 `status`（`retained / removed`）。无需备份时记录原因，省去空备份。
+- 最终评估记录建议删除或保留的确切路径和原因、用户实际给出的清理批准及结果。
 
-Avoid lengthy terminal transcripts, full environment dumps, and duplicate
-configuration. Present the backup index as **path | purpose**, adding size and
-recommendation for cleanup assessment. Save redacted diagnostic logs only when
-needed.
+避免保存冗长的终端输出、完整环境转储和重复配置。汇报备份时，按「路径 | 用途」列出索引，补充大小和清理建议。只在需要时保存脱敏后的诊断日志。
 
-Retain enough original and written-state information to detect restoration
-conflicts. Source values cannot substitute for the target's actual pre-change
-values. After interruption, reconcile records against the device; do not assume
-an uncertain operation succeeded or rerun it blindly.
+保留足够的原值和本次写入值，以便恢复前识别冲突。原值以目标机改动前的实际状态为准。中断后先对照设备和记录，再决定是否继续或重试。

@@ -64,15 +64,11 @@ unless explicitly requested.
 
 #### [`mac-environment-migration`](skills/mac-environment-migration/SKILL.md)
 
-Exports a lightweight Mac environment inventory and builds an approved plan
-for settings, software installation, and shell or development runtime setup on
-another Mac. Adapts changes to the target device, supports acceptance after
-each section, and assesses backup cleanup at the end. Application-state
-restoration is a separate, per-application request.
+导出轻量的 Mac 迁移包，也可直接读取随 Skill 安装的内置参考。
+根据目标 Mac 的实际情况，为系统设置、软件安装和开发环境制定差异计划。
+用户批准后执行，支持分阶段验收，结束时评估备份清理。应用状态按用户点名的应用另行恢复。
 
-Invoke manually with `$mac-environment-migration` or explicitly ask to use
-`mac-environment-migration`. Automatic invocation is disabled in Codex through
-`agents/openai.yaml`.
+使用 `$mac-environment-migration`，或明确指定使用 `mac-environment-migration`。
 
 #### [`tailscale-remote-access`](skills/tailscale-remote-access/SKILL.md)
 
