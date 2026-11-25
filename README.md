@@ -80,6 +80,17 @@ Tailscale SSH 和屏幕共享配置说明。正文为中文。
 默认采用官方独立应用版 Tailscale + macOS 远程登录 + SSH 公钥认证。
 文档区分系统睡眠与息屏、状态显示与实际连通性，以及远端账户密码与私钥口令。
 
+### Image Editing
+
+#### [`image-text-edit`](skills/image-text-edit/SKILL.md)
+
+在纯色或容易复现的背景上局部替换图中文字和数字。先复现旧文字以校准字体与排版，
+复用原有字形，再渲染新内容并贴回原图，验证修改区域外的像素完全一致。
+附带字体渲染、参数搜索和局部合成校验工具，正文为中文。
+
+使用 `$image-text-edit`。图像处理工具依赖 Python 3 和 Pillow；
+Apple 原生字体渲染工具另需 macOS 和 Swift。
+
 ## Repository Structure
 
 ```text

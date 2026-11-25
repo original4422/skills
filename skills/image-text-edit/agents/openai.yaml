@@ -1,0 +1,4 @@
+interface:
+  display_name: "图中文字编辑"
+  short_description: "校准原图字体与排版，局部替换文字，验证修改区域之外的像素保持一致"
+  default_prompt: "使用 $image-text-edit 修改截图中的指定文字，校准原有字体和排版，保留其余像素，并保存到“修改”文件夹。"
